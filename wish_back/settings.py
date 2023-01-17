@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-from .config import config
+from os import getenv
+import dotenv
+
+dotenv.load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-26!%+v0wr$wml!$3tzbdnga7cmvuihop=p((od62hav#%gqi!v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config['DEBUG']
+DEBUG = getenv('WISH_DEBUG', False)
 
-ALLOWED_HOSTS = config['BACKEND_URLs']
+ALLOWED_HOSTS = getenv('WISH_BACKEND_URLS', '').split()
 
 
 # Application definition
@@ -59,7 +62,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = config['FRONTEND_URLs']
+CORS_ALLOWED_ORIGINS = getenv('WISH_FRONTEND_URLS', '').split()
 
 
 CORS_ALLOW_METHODS = [
@@ -71,7 +74,7 @@ CORS_ALLOW_METHODS = [
     "PUT",
 ]
 
-CSRF_TRUSTED_ORIGINS = config['FRONTEND_URLs']
+CSRF_TRUSTED_ORIGINS = getenv('WISH_FRONTEND_URLS', '').split()
 
 
 CORS_ALLOW_CREDENTIALS = True
