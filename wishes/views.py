@@ -1,20 +1,22 @@
-from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
+from django.middleware.csrf import get_token
+from random import shuffle
 from .models import Wish
 import json
-from django.middleware.csrf import get_token
-# Create your views here.
+
+
 def wishQuerySet2Array(querySet):
     res={}
-    cnt=0
-    for wish in querySet:
-        cnt+=1
+    querySet = list(querySet)
+    shuffle(querySet)
+    for cnt, wish in enumerate(querySet):
+        cnt += 1
         res[f'wisher{cnt}']=wish.wisher
         res[f'wishID{cnt}']=wish.id
         res[f'wishContent{cnt}']=wish.wishContent
         res[f'reward{cnt}']=wish.reward
         res[f'isRealized{cnt}']=wish.isRealized
-    res['wishCnt']=cnt
+    res['wishCnt'] = len(querySet)
     return res
 
 def getAllWishes(request):
